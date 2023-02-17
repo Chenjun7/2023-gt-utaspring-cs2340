@@ -19,5 +19,8 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
+
+        //Set content view to game
+        this.setContentView(new Game(this));
     }
 }
