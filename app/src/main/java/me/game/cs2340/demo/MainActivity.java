@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-/**
- * MainActivity is the entry point to the game.
- */
 public class MainActivity extends Activity {
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Sets flags to full screen mode
