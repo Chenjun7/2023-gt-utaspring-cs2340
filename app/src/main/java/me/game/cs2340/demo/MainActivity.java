@@ -10,13 +10,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Sets flags to full screen mode
-        Window applicationWindow = this.getWindow();
-        applicationWindow.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
-
         //Set content view to game
         this.setContentView(new Game(this));
     }
