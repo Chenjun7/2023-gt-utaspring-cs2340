@@ -54,7 +54,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Paint paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.white));
         paint.setTextSize(50);
-        canvas.drawText("UPS: " + updatesPerSecond, 100, 20, paint);
+        canvas.drawText("UPS: " + updatesPerSecond, 100, 100, paint);
     }
 
     public void drawFPS(Canvas canvas) {
@@ -62,7 +62,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Paint paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.white));
         paint.setTextSize(50);
-        canvas.drawText("FPS: " + framesPerSecond, 100, 40, paint);
+        canvas.drawText("FPS: " + framesPerSecond, 100, 200, paint);
     }
 
     public void update() {
