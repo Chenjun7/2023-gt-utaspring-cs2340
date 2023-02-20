@@ -7,12 +7,29 @@ import androidx.core.content.ContextCompat;
 public class Enemy extends CircleEntity {
     private static final double SPEED_PIXELS_PER_SECOND = Player.getSpeedPixelsPerSecond() * 0.5;
     private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.getMaxUPS();
+    private static final double SPAWNS_PER_MINUTE = 50;
+    private static final double SPAWNS_PER_SECOND = SPAWNS_PER_MINUTE / 60.0;
+    private static final double UPDATES_PER_SPAWN = GameLoop.getMaxUPS() / SPAWNS_PER_SECOND;
+    private static double updatesTillNextSpawn;
     private Player player;
 
-    public Enemy(Context context, Player player, double xPosition, double yPosition, double radius) {
-        super(context, ContextCompat.getColor(context, R.color.enemy), xPosition, yPosition, radius);
+    public Enemy(Context context, Player player) {
+        super(context, ContextCompat.getColor(context, R.color.enemy),
+                Math.random() * 1000, Math.random() * 1000, 30);
         this.player = player;
+        updatesTillNextSpawn = UPDATES_PER_SPAWN
     }
+
+    public static boolean spawnReady() {
+        if (updatesTillNextSpawn <= 0) {
+            updatesTillNextSpawn += UPDATES_PER_SPAWN;
+            return true;
+        } else {
+            updatesTillNextSpawn -= 1;
+            return false;
+        }
+    }
+
     @Override
     public void update() {
         double xDistanceToPlayer = player.getXPosition() - xPosition;
