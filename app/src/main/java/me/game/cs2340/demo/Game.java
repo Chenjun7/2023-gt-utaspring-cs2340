@@ -19,11 +19,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
 
         //Gets the surface holder and adds callback to game
-        SurfaceHolder surfaceHolder = this.getHolder();
+        SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
         this.gameLoop = new GameLoop(this, surfaceHolder);
-        this.player = new Player(this.getContext(), 1000, 500, 30);
+        this.player = new Player(getContext(), 1000, 500, 30);
         this.joystick = new Joystick(275, 700, 70, 40);
 
         this.setFocusable(true);
@@ -31,7 +31,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        this.gameLoop.startLoop();
+        gameLoop.startLoop();
     }
 
     @Override
@@ -48,14 +48,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (joystick.isPressed((double) event.getX(), (double) event.getY())) {
+                    joystick.setIsPressed(true);
+                }
+                return true;
             case MotionEvent.ACTION_MOVE:
-                if (this.joystick.isPressed((double) event.getY(), (double) event.getY())) {
-                    this.joystick.setIsPressed(true);
+                if (joystick.getIsPressed()) {
+                    joystick.setActuator((double) event.getX(), (double) event.getY());
                 }
                 return true;
             case MotionEvent.ACTION_UP:
-                this.joystick.setIsPressed(false);
-                this.joystick.resetActuator();
+                joystick.setIsPressed(false);
+                joystick.resetActuator();
                 return true;
         }
 
@@ -64,16 +68,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        this.drawUPS(canvas);
-        this.drawFPS(canvas);
-        this.player.draw(canvas);
-        this.joystick.draw(canvas);
+        drawUPS(canvas);
+        drawFPS(canvas);
+        joystick.draw(canvas);
+        player.draw(canvas);
     }
 
     public void drawUPS(Canvas canvas) {
         String updatesPerSecond = Double.toString(gameLoop.getAverageUPS());
         Paint paint = new Paint();
-        paint.setColor(ContextCompat.getColor(this.getContext(), R.color.white));
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.white));
         paint.setTextSize(50);
         canvas.drawText("UPS: " + updatesPerSecond, 100, 100, paint);
     }
@@ -81,13 +85,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void drawFPS(Canvas canvas) {
         String framesPerSecond = Double.toString(gameLoop.getAverageFPS());
         Paint paint = new Paint();
-        paint.setColor(ContextCompat.getColor(this.getContext(), R.color.white));
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.white));
         paint.setTextSize(50);
         canvas.drawText("FPS: " + framesPerSecond, 100, 200, paint);
     }
 
     public void update() {
-        this.joystick.update();
-        this.player.update(joystick);
+        joystick.update();
+        player.update(joystick);
     }
 }

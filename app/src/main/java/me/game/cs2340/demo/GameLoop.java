@@ -3,13 +3,15 @@ package me.game.cs2340.demo;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
+import java.util.Arrays;
+
 public class GameLoop extends Thread{
     private Game game;
-    private SurfaceHolder surfaceHolder;
+    private final SurfaceHolder surfaceHolder;
 
     private boolean isRunning;
-    private double averageUPS;
-    private double averageFPS;
+    private int averageUPS;
+    private int averageFPS;
 
     private static final double MAX_UPS = 30.0;
     private static final double UPS_PERIOD = 1000 / MAX_UPS;
@@ -51,21 +53,21 @@ public class GameLoop extends Thread{
 
         while(isRunning) {
             try {
-                canvas = this.surfaceHolder.lockCanvas();
-                synchronized (this.surfaceHolder) {
-                    this.game.update();
+                canvas = surfaceHolder.lockCanvas();
+                synchronized (surfaceHolder) {
+                    game.update();
                     updatesCounter += 1;
-                    this.game.draw(canvas);
+                    game.draw(canvas);
                 }
             } catch (IllegalArgumentException e) {
-                System.err.println(e.getStackTrace());
+                System.err.println(Arrays.toString(e.getStackTrace()));
             } finally {
                 if (canvas != null) {
                     try {
-                        this.surfaceHolder.unlockCanvasAndPost(canvas);
+                        surfaceHolder.unlockCanvasAndPost(canvas);
                         framesCounter += 1;
                     } catch (Exception e) {
-                        System.err.println(e.getStackTrace());
+                        System.err.println(Arrays.toString(e.getStackTrace()));
                     }
                 }
             }
@@ -74,9 +76,9 @@ public class GameLoop extends Thread{
             sleepTime = (long) (updatesCounter * UPS_PERIOD - elapsedTime);
             if (sleepTime > 0) {
                 try {
-                    this.sleep(sleepTime);
+                    sleep(sleepTime);
                 } catch (InterruptedException e) {
-                    System.err.println(e.getStackTrace());
+                    System.err.println(Arrays.toString(e.getStackTrace()));
                 }
             }
 
@@ -89,8 +91,8 @@ public class GameLoop extends Thread{
 
             elapsedTime = System.currentTimeMillis() - startTime;
             if (elapsedTime >= 1000) {
-                averageUPS = updatesCounter / (1000 * elapsedTime);
-                averageFPS = framesCounter / (1000 * elapsedTime);
+                averageUPS = (int) (updatesCounter / (0.001 * elapsedTime));
+                averageFPS = (int) (framesCounter / (0.001 * elapsedTime));
                 updatesCounter = 0;
                 framesCounter = 0;
                 startTime = System.currentTimeMillis();
