@@ -22,6 +22,12 @@ public class Player extends CircleEntity {
 
         xPosition += xVelocity;
         yPosition += yVelocity;
+
+        if (xVelocity != 0 || yVelocity != 0) {
+            double euclideanDistance = Utility.getEuclideanDistance(0, 0, xVelocity, yVelocity);
+            xDirection = xVelocity / euclideanDistance;
+            yDirection = yVelocity / euclideanDistance;
+        }
     }
 
     public static double getSpeedPixelsPerSecond() {
