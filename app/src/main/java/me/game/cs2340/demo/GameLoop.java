@@ -33,6 +33,9 @@ public class GameLoop extends Thread{
         super.start();
     }
 
+    public static double getMaxUPS() {
+        return MAX_UPS;
+    }
     @Override
     public void run() {
         super.run();
