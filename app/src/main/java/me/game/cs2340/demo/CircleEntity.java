@@ -15,7 +15,14 @@ public abstract class CircleEntity extends GameEntity {
         paint.setColor(color);
     }
 
+    public static boolean isColliding(CircleEntity obj1, CircleEntity obj2) {
+        return getEntityDistance(obj1, obj2) < obj1.getRadius() + obj2.getRadius();
+    }
     public void draw(Canvas canvas) {
         canvas.drawCircle((float) xPosition, (float) yPosition, (float) radius, paint);
+    }
+
+    public double getRadius() {
+        return radius;
     }
 }
