@@ -5,8 +5,8 @@ import android.content.Context;
 import androidx.core.content.ContextCompat;
 
 public class Enemy extends CircleEntity {
-    private static final double SPEED_PIXELS_PER_SECOND = Player.getSpeedPixelsPerSecond();
-    private static final double MAX_SPEED = Player.getSpeedPixelsPerSecond() / GameLoop.getMaxUPS();
+    private static final double SPEED_PIXELS_PER_SECOND = Player.getSpeedPixelsPerSecond() * 0.5;
+    private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.getMaxUPS();
     private Player player;
 
     public Enemy(Context context, Player player, double xPosition, double yPosition, double radius) {
@@ -31,9 +31,6 @@ public class Enemy extends CircleEntity {
             yVelocity = 0;
         }
 
-        // =========================================================================================
-        //   Update position of the enemy
-        // =========================================================================================
         xPosition += xVelocity;
         yPosition += yVelocity;
     }
