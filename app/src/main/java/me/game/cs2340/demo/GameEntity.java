@@ -7,6 +7,8 @@ public abstract class GameEntity {
     protected double yPosition;
     protected double xVelocity;
     protected double yVelocity;
+    protected double xDirection;
+    protected double yDirection;
 
     public GameEntity(double xPosition, double yPosition) {
         this.xPosition = xPosition;
@@ -20,13 +22,18 @@ public abstract class GameEntity {
         return yPosition;
     }
 
+    public double getXDirection() {
+        return xDirection;
+    }
+
+    public double getYDirection() {
+        return yDirection;
+    }
+
     public abstract void draw(Canvas canvas);
     public abstract void update();
 
     public static double getEntityDistance(GameEntity obj1, GameEntity obj2) {
-        return Math.sqrt(
-                Math.pow(obj2.getXPosition() - obj1.getXPosition(), 2) +
-                        Math.pow(obj2.getYPosition() - obj1.getYPosition(), 2)
-        );
+        return Utility.getEuclideanDistance(obj1.getXPosition(), obj1.getYPosition(), obj2.getXPosition(), obj2.getYPosition());
     }
 }
