@@ -17,7 +17,7 @@ public class Enemy extends CircleEntity {
         super(context, ContextCompat.getColor(context, R.color.enemy),
                 Math.random() * 1000, Math.random() * 1000, 30);
         this.player = player;
-        updatesTillNextSpawn = UPDATES_PER_SPAWN
+        updatesTillNextSpawn = UPDATES_PER_SPAWN;
     }
 
     public static boolean spawnReady() {
