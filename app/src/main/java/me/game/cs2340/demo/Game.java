@@ -14,7 +14,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private GameLoop gameLoop;
     private final Player player;
-
+    private final Joystick joystick;
     public Game(Context context) {
         super(context);
 
@@ -24,6 +24,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         this.gameLoop = new GameLoop(this, surfaceHolder);
         this.player = new Player(this.getContext(), 1000, 500, 30);
+        this.joystick = new Joystick(275, 700, 70, 40);
 
         this.setFocusable(true);
     }
@@ -48,7 +49,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                player.setPosition((double) event.getX(), (double) event.getY());
+                if (this.joystick.isPressed((double) event.getY(), (double) event.getY())) {
+                    this.joystick.setIsPressed(true);
+                }
+                return true;
+            case MotionEvent.ACTION_UP:
+                this.joystick.setIsPressed(false);
+                this.joystick.resetActuator();
                 return true;
         }
 
@@ -60,6 +67,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         this.drawUPS(canvas);
         this.drawFPS(canvas);
         this.player.draw(canvas);
+        this.joystick.draw(canvas);
     }
 
     public void drawUPS(Canvas canvas) {
@@ -79,6 +87,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
-        player.update();
+        this.joystick.update();
+        this.player.update(joystick);
     }
 }
