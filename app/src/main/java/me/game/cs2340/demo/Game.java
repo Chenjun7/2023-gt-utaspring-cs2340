@@ -10,11 +10,15 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private GameLoop gameLoop;
     private final Player player;
-    private final Enemy enemy;
+    private List<Enemy> enemyList;
     private final Joystick joystick;
     public Game(Context context) {
         super(context);
@@ -26,7 +30,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         this.gameLoop = new GameLoop(this, surfaceHolder);
         this.joystick = new Joystick(275, 700, 70, 40);
         this.player = new Player(getContext(), joystick, 1000, 500, 30);
-        this.enemy = new Enemy(getContext(), player, 500, 500, 30);
+        this.enemyList = new LinkedList<Enemy>();
 
         this.setFocusable(true);
     }
@@ -74,7 +78,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawFPS(canvas);
         joystick.draw(canvas);
         player.draw(canvas);
-        enemy.draw(canvas);
+        for (Enemy enemy : enemyList) {
+            enemy.draw(canvas);
+        }
     }
 
     public void drawUPS(Canvas canvas) {
@@ -96,6 +102,20 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void update() {
         joystick.update();
         player.update();
-        enemy.update();
+
+        if(Enemy.spawnReady()) {
+            enemyList.add(new Enemy(getContext(), player));
+        }
+
+        for (Enemy enemy : enemyList) {
+            enemy.update();
+        }
+
+        Iterator<Enemy> enemyIterator = enemyList.iterator();
+        while(enemyIterator.hasNext()) {
+            if (CircleEntity.isColliding(enemyIterator.next(), player)) {
+                enemyIterator.remove();
+            }
+        }
     }
 }
