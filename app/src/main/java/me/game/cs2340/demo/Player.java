@@ -23,4 +23,8 @@ public class Player extends CircleEntity {
         xPosition += xVelocity;
         yPosition += yVelocity;
     }
+
+    public static double getSpeedPixelsPerSecond() {
+        return SPEED_PIXELS_PER_SECOND;
+    }
 }
